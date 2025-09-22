@@ -9,10 +9,18 @@
 <div class="main-content">
     <div class="first-row">
         <div class="card1">
-            <div class="card-header1">Products Overview  @ViewBag.productcount</div>
+            <div class="header">
+                <div class="card-header1">Products Overview  @ViewBag.productcount</div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search" style="color:#3c3"></i>
+                        <input type="text" id="searchInput" placeholder="Search..." style="color:blue">
+                    </div>
+                </div>
+            </div>            
             <div class="card-bodytable">
                 <div class="table-container">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="searchableTable">
                         <thead class="table-header-fixed">
                             <tr>                            
                                 <th>#</th>

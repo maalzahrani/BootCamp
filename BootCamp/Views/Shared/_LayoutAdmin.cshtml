@@ -71,9 +71,10 @@
             <p style="color:#3c3;">Welcome to your BootCamp</p>
         </div>
         <div class="header-right">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search...">
+            <div class="stat-card1">
+                <i class="fa-brands fa-youtube"></i>
+                <i class="fa-brands fa-twitter"></i>
+                <i class="fa-brands fa-linkedin"></i>
             </div>
             <div class="user-profile">
                 <div class="avatar">MA</div>
@@ -112,6 +113,40 @@
         setInterval(() => {
             moveCarousel(1);
         }, 5000);
+    </script>
+    <script>
+
+                document.getElementById('searchInput').addEventListener('keyup', function() {
+            searchTable();
+        });
+
+        function searchTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById('searchableTable');
+            const rows = table.getElementsByTagName('tr');
+            const notFound = document.getElementById('notFound');
+            var hasResult = false;
+
+            // LOOP THROUGH ALL ROWS EXCEPT FOR HEADERS
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+
+                // LOOP THROUGH ALL CELLS WITHIN THE ROW
+                for (let j = 0; j < cells.length; j++) {
+                    const cellText = cells[j].textContent || cells[j].innerText;
+                    if (cellText.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        hasResult = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = found ? '' : 'none';
+            }
+            // DISPLAY NOT FOUND MESSAGE
+            (!hasResult) ? notFound.style.display = 'block' : notFound.style.display = 'none';
+        }
     </script>
     
 </body>
