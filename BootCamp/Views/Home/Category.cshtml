@@ -1,0 +1,47 @@
+﻿@model IEnumerable<BootCamp.Models.Category>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Category";
+    int counter = 1;
+}
+
+<div class="main-content">
+    
+        <div class="card1">
+            <div class="card-header1">Categories Info</div>
+            <div class="card-bodytable">
+                <div class="table-container">
+                    <table class="table table-hover">
+                        <thead class="table-header-fixed">
+                            <tr>
+                                <th>#</th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@(counter++)</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>

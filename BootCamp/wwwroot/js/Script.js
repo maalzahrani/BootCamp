@@ -1,28 +1,27 @@
-﻿// Dashboard JavaScript functionality
+﻿
 document.addEventListener('DOMContentLoaded', function () {
-    // Get current time for greeting
-    function updateGreeting() {
-        const now = new Date();
-        const hour = now.getHours();
-        let greeting = 'Good Morning';
-
-        if (hour >= 12 && hour < 17) {
-            greeting = 'Good Afternoon';
-        } else if (hour >= 17) {
-            greeting = 'Good Evening';
-        }
-
         const greetingElement = document.querySelector('.greeting');
-        if (greetingElement) {
-            greetingElement.textContent = `${greeting} MOHAMMED ABDULKAREEM M ALZAHRANI`;
+        const computerName = greetingElement ? greetingElement.getAttribute('data-computer-name') : '';
+
+        function updateGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = 'Good Morning';
+
+            if (hour >= 12 && hour < 17) {
+                greeting = 'Good Afternoon';
+            } else if (hour >= 17) {
+                greeting = 'Good Evening';
+            }
+
+            if (greetingElement) {
+                greetingElement.textContent = `${greeting} ${computerName}`;
+            }
         }
-    }
 
-    // Initialize greeting
-    updateGreeting();
-
-    // Update greeting every minute
-    setInterval(updateGreeting, 60000);
+        updateGreeting();
+        setInterval(updateGreeting, 60000);
+    
 
     // Search functionality
     const searchInput = document.querySelector('.search-input');
@@ -34,121 +33,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Navigation items
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', function () {
-            // Remove active class from all items
-            navItems.forEach(nav => nav.classList.remove('active'));
-            // Add active class to clicked item
-            this.classList.add('active');
+    // Enhance with smooth client-side behavior
+    document.addEventListener('DOMContentLoaded', function () {
+        const navItems = document.querySelectorAll('.nav-item');
 
-            console.log('Navigation clicked:', this.textContent.trim());
+        navItems.forEach(item => {
+            const link = item.querySelector('.nav-link');
+            if (link) {
+                link.addEventListener('click', function (e) {
+                    // Remove active class from all items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+
+                    // Optional: Store for persistence
+                    localStorage.setItem('activeNav', item.getAttribute('data-action'));
+                });
+            }
         });
     });
-
-    // Chat functionality
-    const chatInput = document.querySelector('.chat-input');
-    const sendButton = document.querySelector('.send-button');
-    const chatMessages = document.querySelector('.chat-messages');
-
-    function addMessage(text, type = 'sent') {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}`;
-
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        messageDiv.innerHTML = `
-            <div class="message-bubble">
-                <p>${text}</p>
-                <span class="message-time">${timeString}</span>
-            </div>
-        `;
-
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function sendMessage() {
-        const message = chatInput.value.trim();
-        if (message) {
-            addMessage(message, 'sent');
-            chatInput.value = '';
-
-            // Simulate response after 1 second
-            setTimeout(() => {
-                const responses = [
-                    "Thank you for your message. How can I assist you further?",
-                    "I understand your concern. Let me help you with that.",
-                    "Could you provide more details about this issue?",
-                    "I'll look into this right away for you."
-                ];
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                addMessage(randomResponse, 'received');
-            }, 1000);
-        }
-    }
-
-    if (sendButton) {
-        sendButton.addEventListener('click', sendMessage);
-    }
-
-    if (chatInput) {
-        chatInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    }
-
-    // Action buttons
-    const actionButtons = document.querySelectorAll('.action-button');
-    actionButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const action = this.textContent.trim().toLowerCase();
-            console.log('Action clicked:', action);
-
-            // Add button press animation
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
-        });
-    });
-
-    // Chat button in header
-    const chatButton = document.querySelector('.chat-button');
-    if (chatButton) {
-        chatButton.addEventListener('click', function () {
-            // Scroll to chat section
-            const chatCard = document.querySelector('.chat-card');
-            if (chatCard) {
-                chatCard.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-
-    // Floating action button
-    const floatingButton = document.querySelector('.floating-button');
-    if (floatingButton) {
-        floatingButton.addEventListener('click', function () {
-            // Scroll to chat section or open chat modal
-            const chatCard = document.querySelector('.chat-card');
-            if (chatCard) {
-                chatCard.scrollIntoView({ behavior: 'smooth' });
-                // Focus on chat input
-                setTimeout(() => {
-                    if (chatInput) {
-                        chatInput.focus();
-                    }
-                }, 500);
-            }
-        });
-    }
 
     // Add hover effects for cards
     const cards = document.querySelectorAll('.card');
@@ -162,28 +65,65 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Phone animation
-    const phones = document.querySelectorAll('.phone');
-    phones.forEach((phone, index) => {
-        phone.addEventListener('mouseenter', function () {
-            this.style.transform = this.style.transform.replace('scale(1)', 'scale(1.05)');
-            if (!this.style.transform.includes('scale')) {
-                const currentTransform = this.style.transform || (index === 0 ? 'rotate(-12deg)' : 'rotate(12deg)');
-                this.style.transform = currentTransform + ' scale(1.05)';
+
+    // Price filter functionality with debug
+    document.addEventListener('DOMContentLoaded', function () {
+        const filterButton = document.getElementById('filterPrice');
+
+        if (filterButton) {
+            // Debug: Check all data attributes on page load
+            const table = document.getElementById('productTable');
+            if (table) {
+                const rows = table.querySelectorAll('tbody tr');
+                console.log('Debug - All data-price attributes:');
+                rows.forEach((row, index) => {
+                    const priceAttr = row.getAttribute('data-price');
+                    console.log(`Row ${index}:`, priceAttr, 'Type:', typeof priceAttr);
+                });
             }
-        });
 
-        phone.addEventListener('mouseleave', function () {
-            this.style.transform = this.style.transform.replace('scale(1.05)', 'scale(1)');
-        });
-    });
+            filterButton.addEventListener('click', function () {
+                const table = document.getElementById('productTable');
+                if (!table) {
+                    console.error('Table with id "productTable" not found!');
+                    return;
+                }
 
-    // Add loading animation for status indicators
-    const statusDots = document.querySelectorAll('.dot, .activity-dot');
-    statusDots.forEach((dot, index) => {
-        setInterval(() => {
-            dot.style.opacity = dot.style.opacity === '0.5' ? '1' : '0.5';
-        }, 1000 + (index * 200));
+                const rows = table.querySelectorAll('tbody tr');
+                let isCurrentlyFiltered = filterButton.textContent.includes('Show All');
+
+                console.log('Filter button clicked. Current state:', isCurrentlyFiltered);
+
+                rows.forEach((row, index) => {
+                    const priceAttr = row.getAttribute('data-price');
+                    console.log(`Row ${index} data-price:`, priceAttr);
+
+                    // Handle both comma and dot decimal separators
+                    const priceText = priceAttr ? priceAttr.replace(',', '.') : '0';
+                    const price = parseFloat(priceText);
+
+                    console.log(`Row ${index} parsed price:`, price);
+
+                    if (isCurrentlyFiltered) {
+                        // Show all rows
+                        row.style.display = '';
+                        filterButton.textContent = 'Show Price < 100';
+                    } else {
+                        // Filter rows
+                        if (!isNaN(price) && price < 100) {
+                            row.style.display = '';
+                            console.log(`Row ${index} shown (price < 100)`);
+                        } else {
+                            row.style.display = 'none';
+                            console.log(`Row ${index} hidden (price >= 100)`);
+                        }
+                        filterButton.textContent = 'Show All';
+                    }
+                });
+            });
+        } else {
+            console.error('Filter button with id "filterPrice" not found!');
+        }
     });
 
     // Profile avatar click
